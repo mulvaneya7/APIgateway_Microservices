@@ -9,11 +9,26 @@
 import sys
 
 import flask
-import requests, itertools
+import requests, itertools, logging
+from flask_basicauth import BasicAuth
 
 app = flask.Flask(__name__)
 app.config.from_envvar('APP_CONFIG')
 
+#Overriding of the check credentials function
+#We make an authorize request to the users service
+class BasicAuthOverride(BasicAuth):
+    def check_credentials(self, username, password):
+        r = requests.get('http://localhost:5100/api/v1/users/authuser', auth=(username, password))
+        #app.logger.info(f'request: {r.json()}')
+        return r.json()['authorized']
+
+#basic authorization
+basic_auth = BasicAuthOverride(app)
+#app.config['BASIC_AUTH_FORCE'] = True
+app.config['BASIC_AUTH_REALM'] = 'Authorize'
+
+#obtaining Port list converting into an iterable list
 usersPort = app.config['USERS']
 timelinesPort = app.config['TIMELINES']
 userNodes = itertools.cycle(usersPort)
@@ -22,6 +37,7 @@ timelineNodes = itertools.cycle(timelinesPort)
 
 
 @app.errorhandler(404)
+@basic_auth.required
 def route_page(err):
 
     try:

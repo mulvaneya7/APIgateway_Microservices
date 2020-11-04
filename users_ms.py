@@ -48,7 +48,7 @@ def createuser():
 def check_auth(username, password):
     user = queries.get_user(username_=username)
     if user is None:
-        abort(404) #(NOT FOUND: user doesnt exist)
+        abort(401) #(NOT FOUND: user doesnt exist)
     else:
         return check_password_hash(user['Pass'], password)
 
@@ -57,7 +57,7 @@ def check_auth(username, password):
 def auth_user():
     auth = request.authorization
     if not auth:
-        abort(400) #(BAD REQUEST)
+        abort(401) #(BAD REQUEST)
     else:
         cred = check_auth(auth.username, auth.password)
         return jsonify({'authorized': cred})
