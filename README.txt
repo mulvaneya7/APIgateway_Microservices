@@ -16,9 +16,8 @@ procfile contents:
 
 
 commands:
-    flask init     #creates the database and adds two Users(cannot authenticate these two users because password_hash isnt called on them,   
-                    you can authenticate newly created users though)
-                    
+    flask init     #creates the database and adds two Users(cannot authenticate these two users because password_hash   
+                    isnt called on them, you can authenticate newly created users though)  
     foreman start -m gateway=1,users=3,timelines=3,app=3  #spins up the microservices
 
 
