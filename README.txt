@@ -14,6 +14,10 @@ procfile contents:
     FLASK_ENV=development  
     APP_CONFIG=routes.cfg  
 
+routes.cfg contents:
+    USERS = ['http://localhost:5100', 'http://localhost:5101', 'http://localhost:5102'] 
+    TIMELINES = ['http://localhost:5200', 'http://localhost:5201', 'http://localhost:5202']
+
 
 commands:
     flask init     #creates the database and adds two Users(cannot authenticate these two users because password_hash   
